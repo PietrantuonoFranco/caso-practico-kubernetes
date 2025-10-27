@@ -88,38 +88,71 @@ kubectl
 
 Ejecutando unicamente ese comando obtendremos la información de todas las cosas que se pueden realizar con ese comando, como crear un recurso, configurarlo, etc.
 
-# Definición de recursos
+## Ejecución de los servicios
 
----
-
-El código el cual define la estructura de un POD, se realiza mediante un archivo **`.yaml`**.
-
-### Ejemplo
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-deployment
-spec:
-  replicas: 3 # Queremos 3 copias (Pods) de nuestra aplicación
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx-container
-        image: nginx:latest
-        ports:
-        - containerPort: 80
-```
-
-Para aplicar el archivo de configuración, debemos ejecutar el siguiente comando
+Para ejecutar nuestros servicios, debemos ejecutar el siguiente comando
 
 ```bash
-kubectl apply -f <mi-recurso>.yaml
+./init.sh
+```
+
+## Variables de entorno
+
+Lo primero sera crear un archivo **`.env`** para guardar 
+
+### Ejemplo de `.env`:
+
+```bash
+#_________NodeJS__________
+NODE_ENV=production
+
+#________ExpressJS________
+EXPRESS_PORT=3000
+
+#________Astro________
+ASTRO_PORT=4321
+
+#__________CORS___________
+CORS_ORIGIN=http://tu-dominio.com
+
+#__________Nginx__________
+NGINX_PORT=80
+
+#______JsonWebToken_______
+JWT_SECRET=tu-jwt-secreto
+
+#_________TypeORM_________
+DB_USER=usuario
+DB_PASSWORD=contraseña
+DB_NAME=localicity
+
+POSTGRES_USER=usuario
+POSTGRES_PASSWORD=contraseña
+POSTGRES_DB=localicity
+POSTGRES_PORT=5432
+
+#_________Bcrypt__________
+SALT_ROUNDS=5
+```
+
+Para crear las variables de entorno que posteriormente utilizaran nuestro recursos utilizamos los siguientes comandos (suponiendo que ya existe el archivo **`.env`**):
+
+```bash
+# desde el directorio donde está .env
+kubectl delete secret app-secrets -n localicity-app 2>/dev/null || true
+kubectl create secret generic app-secrets --from-env-file=.env -n localicity-app
+kubectl get secret app-secrets -n localicity-app -o yaml
+```
+
+Luego ejecutamos el siguiente script para reiniciar el deployment\
+
+```bash
+kubectl rollout restart deployment api -n localicity-app
+kubectl get pods -n localicity-app -w
+```
+
+Para exponer el servicio debemos ejecutar el siguiente comando:
+
+```bash
+./expose-nginx-local
 ```
