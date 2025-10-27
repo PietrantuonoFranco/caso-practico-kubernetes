@@ -1,2 +1,8 @@
 # Secrets
 .env
+
+# Logs
+*.log
+
+# PIDs
+*.pid
