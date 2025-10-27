@@ -1,29 +1,26 @@
-# caso-practico-kubernetes
+# Caso Práctico sobre Kubernetes
 
-# Inicialización de un clúster
-
----
+## Inicialización de un clúster
 
 El primer paso a realizar es el inicializar un clúster el cual alojara todos los nodos que querramos mantener en ejecución dentro de él.
 
-## 1. Requisitos Previos
+### 1. Requisitos Previos
 
 Antes de empezar, necesitas tener instaladas dos cosas en tu sistema operativo (Windows, macOS o Linux):
 
 1. **kubectl:** La herramienta de línea de comandos de Kubernetes. Es esencial para interactuar con el clúster una vez que esté funcionando.
 2. **Un entorno de virtualización o contenedorización:** Minikube necesita una forma de ejecutar el nodo de Kubernetes. El método más fácil es usar **Docker**. Asegúrate de que **Docker esté instalado y ejecutándose**.
 
-## 2. Instalar Minikube
+### 2. Instalar Minikube
 
 Descarga e instala el binario de Minikube. La forma más común es a través de gestores de paquetes o descargándolo directamente.
 
-### Comando de Instalación (Ejemplos)
+#### Comando de Instalación (Ejemplos)
 
 | **Linux** | **`curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/`** |
 | --- | --- |
 | **Windows** | `winget install Kubernetes.minikube` |
 | **macOS** | `brew install minikube` |
-|  |  |
 
 <aside>
 💡
@@ -43,7 +40,7 @@ minikube version
 
 </aside>
 
-## 3. Iniciar el Clúster
+### 3. Iniciar el Clúster
 
 Una vez que tengas Minikube y Docker instalados, puedes iniciar tu clúster con un solo comando. Usaremos el *driver* de Docker, que es el más rápido.
 
@@ -68,7 +65,7 @@ Una vez que tengas Minikube y Docker instalados, puedes iniciar tu clúster con 
     ```
     
 
-## 4. Próximos Pasos (Opcional)
+### 4. Próximos Pasos (Opcional)
 
 Una vez que el clúster esté iniciado, puedes empezar a trabajar con él.
 
@@ -150,6 +147,8 @@ Luego ejecutamos el siguiente script para reiniciar el deployment\
 kubectl rollout restart deployment api -n localicity-app
 kubectl get pods -n localicity-app -w
 ```
+
+## Exposición del servicio
 
 Para exponer el servicio debemos ejecutar el siguiente comando:
 
