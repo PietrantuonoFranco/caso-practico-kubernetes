@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: localicity-app
+data:
+  node-env: "production"
+  cors-origin: "*"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: localicity-app
+data:
+  nginx.conf: |
+    events {}
+    http {
+      upstream api {
+        server api-service:3000;
+      }
+      
+      upstream astro {
+        server astro-service:4321;
+      }
+      
+      server {
+        listen 80;
+        
+        location /api/ {
+          proxy_pass http://api/;
+        }
+        
+        location / {
+          proxy_pass http://astro;
+        }
+      }
+    }

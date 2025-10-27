@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: astro
+  namespace: localicity-app
+  labels:
+    app: astro
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: astro
+  template:
+    metadata:
+      labels:
+        app: astro
+    spec:
+      containers:
+      - name: astro
+        image: pietrantuonofranco/astro
+        ports:
+        - containerPort: 4321
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: node-env
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 4321
+          initialDelaySeconds: 20
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 4321
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: astro-service
+  namespace: localicity-app
+spec:
+  selector:
+    app: astro
+  ports:
+  - port: 4321
+    targetPort: 4321
+  type: ClusterIP
