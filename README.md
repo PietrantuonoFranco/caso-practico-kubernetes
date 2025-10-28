@@ -22,23 +22,19 @@ Descarga e instala el binario de Minikube. La forma más común es a través de 
 | **Windows** | `winget install Kubernetes.minikube` |
 | **macOS** | `brew install minikube` |
 
-<aside>
-💡
-
-A mi unicamente me funciono con el siguiente comando:
-
-```bash
-# get Windows username reliably
-USERNAME=$(whoami | sed 's/.*\\//')
-mkdir -p "/c/Users/$USERNAME/bin"
-mv [minikube-windows-amd64.exe](http://_vscodecontentref_/0) "/c/Users/$USERNAME/bin/minikube.exe"
-# ensure path: add C:\Users\<you>\bin to Windows user PATH via PowerShell or Windows UI
-/c/Windows/System32/cmd.exe /c "setx PATH \"%PATH%;C:\\Users\\$USERNAME\\bin\""
-# close and reopen shells, then verify
-minikube version
-```
-
-</aside>
+> [!TIP]
+> **Alternativa:**
+> - Si no te funcionan los comandos anteriores, intenta ejecutar este comando desde tu terminal con **`Bash`**.
+>  ```bash
+> # get Windows username reliably
+> USERNAME=$(whoami | sed 's/.*\\//')
+> mkdir -p "/c/Users/$USERNAME/bin"
+> mv [minikube-windows-amd64.exe](http://_vscodecontentref_/0) "/c/Users/$USERNAME/bin/minikube.exe"
+> # ensure path: add C:\Users\<you>\bin to Windows user PATH via PowerShell or Windows UI
+> /c/Windows/System32/cmd.exe /c "setx PATH \"%PATH%;C:\\Users\\$USERNAME\\bin\""
+> # close and reopen shells, then verify
+> minikube version
+> ```
 
 ### 3. Iniciar el Clúster
 
