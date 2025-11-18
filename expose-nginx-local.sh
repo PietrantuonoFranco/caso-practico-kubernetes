@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
-# expose-nginx-local.sh
-# Simple helper to expose the nginx service locally at http://127.0.0.1:54123
-# Usage:
-#   bash ./expose-nginx-local.sh        # starts port-forward in background and prints URL + PID
-#   bash ./expose-nginx-local.sh stop   # stops the background port-forward
 
 NS="localicity-app"
 SERVICE="nginx-service"
