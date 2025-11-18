@@ -22,23 +22,19 @@ Descarga e instala el binario de Minikube. La forma más común es a través de 
 | **Windows** | `winget install Kubernetes.minikube` |
 | **macOS** | `brew install minikube` |
 
-<aside>
-💡
-
-A mi unicamente me funciono con el siguiente comando:
-
-```bash
-# get Windows username reliably
-USERNAME=$(whoami | sed 's/.*\\//')
-mkdir -p "/c/Users/$USERNAME/bin"
-mv [minikube-windows-amd64.exe](http://_vscodecontentref_/0) "/c/Users/$USERNAME/bin/minikube.exe"
-# ensure path: add C:\Users\<you>\bin to Windows user PATH via PowerShell or Windows UI
-/c/Windows/System32/cmd.exe /c "setx PATH \"%PATH%;C:\\Users\\$USERNAME\\bin\""
-# close and reopen shells, then verify
-minikube version
-```
-
-</aside>
+> [!TIP]
+> **Alternativa:**
+> - Si no te funcionan los comandos anteriores, intenta ejecutar este comando desde tu terminal con **`Bash`**.
+>  ```bash
+> # get Windows username reliably
+> USERNAME=$(whoami | sed 's/.*\\//')
+> mkdir -p "/c/Users/$USERNAME/bin"
+> mv [minikube-windows-amd64.exe](http://_vscodecontentref_/0) "/c/Users/$USERNAME/bin/minikube.exe"
+> # ensure path: add C:\Users\<you>\bin to Windows user PATH via PowerShell or Windows UI
+> /c/Windows/System32/cmd.exe /c "setx PATH \"%PATH%;C:\\Users\\$USERNAME\\bin\""
+> # close and reopen shells, then verify
+> minikube version
+> ```
 
 ### 3. Iniciar el Clúster
 
@@ -139,6 +135,19 @@ Para crear las variables de entorno que posteriormente utilizaran nuestro recurs
 kubectl delete secret app-secrets -n localicity-app 2>/dev/null || true
 kubectl create secret generic app-secrets --from-env-file=.env -n localicity-app
 kubectl get secret app-secrets -n localicity-app -o yaml
+```
+Comando para asignar las variables del `.env` a la app:
+```bash
+kubectl create secret generic app-secrets \
+  --from-literal=postgres-user="$(grep '^POSTGRES_USER=' .env | cut -d'=' -f2-)" \
+  --from-literal=postgres-password="$(grep '^POSTGRES_PASSWORD=' .env | cut -d'=' -f2-)" \
+  --from-literal=postgres-db="$(grep '^POSTGRES_DB=' .env | cut -d'=' -f2-)" \
+  --from-literal=db-user="$(grep '^DB_USER=' .env | cut -d'=' -f2-)" \
+  --from-literal=db-password="$(grep '^DB_PASSWORD=' .env | cut -d'=' -f2-)" \
+  --from-literal=db-name="$(grep '^DB_NAME=' .env | cut -d'=' -f2-)" \
+  --from-literal=salt-rounds="$(grep '^SALT_ROUNDS=' .env | cut -d'=' -f2-)" \
+  --from-literal=jwt-secret="$(grep '^JWT_SECRET=' .env | cut -d'=' -f2-)" \
+  -n localicity-app --dry-run=client -o yaml | kubectl apply -f -
 ```
 
 Luego ejecutamos el siguiente script para reiniciar el deployment\
